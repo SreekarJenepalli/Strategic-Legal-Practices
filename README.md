@@ -16,46 +16,65 @@ Real-time vehicle defect intelligence powered by live NHTSA data — built for l
 </div>
 
 ---
+A professional web application that provides real-time vehicle defect intelligence using live data from the **National Highway Traffic Safety Administration (NHTSA)** public API. Built for Strategic Legal Practice to support case evaluation, recall tracking, and consumer complaint analysis.
 
-## Overview
+---
+## Table of Contents
 
-The **Vehicle Defect Intelligence Platform** gives legal professionals and researchers instant access to comprehensive vehicle safety data from the National Highway Traffic Safety Administration (NHTSA). Decode any VIN, browse safety recalls, analyze consumer complaints, and visualize defect trends — all with live data, no login required.
+1. [Project Overview](#project-overview)
+2. [System Architecture](#system-architecture)
+3. [Live Features](#live-features)
+4. [Tech Stack](#tech-stack)
+5. [Project Structure](#project-structure)
+6. [Prerequisites](#prerequisites)
+7. [Installation & Setup](#installation--setup)
+8. [Running Locally](#running-locally)
 
-- **No database. No API keys. No login.** All data sourced directly from NHTSA's public APIs.
-- **One VIN unlocks everything** — decode once and every tab auto-populates for that vehicle.
-- **Built for law firms** — deep navy and gold aesthetic with Playfair Display typography.
+
+---
+
+## Project Overview
+
+This platform allows legal professionals and researchers to:
+
+- Decode any **17-character Vehicle Identification Number (VIN)** and instantly retrieve full vehicle specs
+- View all **NHTSA Safety Recalls** for a specific vehicle
+- Browse all **Consumer Complaints** filed against a vehicle
+- Analyze defect trends with **interactive charts and a live US choropleth map**
+- Identify the most commonly reported failure components
+
+All data is sourced **live** from NHTSA's public APIs — no database, no login, no API keys required.
 
 ---
 
 ## System Architecture
 
-> The diagram below illustrates the full system — from the React SPA in the browser, through the Vite dev proxy (CORS resolution), to the two NHTSA public API endpoints.
+> The diagram below illustrates the full system — from the React SPA running in the browser, through the Vite dev proxy (which resolves CORS), down to the two NHTSA public API endpoints.
 
-<img width="1980" height="1400" alt="Untitled-2026-03-16-1920" src="https://github.com/user-attachments/assets/61af4577-efd2-459f-acf5-ae6d02f4b02d" />
+<img width="1980" height="1400" alt="Untitled-2026-03-16-1920" src="https://github.com/user-attachments/assets/d9f07049-aa7f-4756-ad90-6b19fbbf1e64" />
 
-The app is a single-page React application. In development, a Vite proxy forwards requests to NHTSA to solve CORS. In production, this is replaced by Vercel/Netlify redirects. No backend server is required at any stage.
+The app is a fully client-side React SPA. In development, `vite.config.ts` proxies all `/api/vpic/*` and `/api/nhtsa/*` calls to their respective NHTSA origins to bypass browser CORS restrictions. In production, these proxies are replaced by Vercel rewrite rules or Netlify `_redirects` — no backend server is needed at any stage.
 
 ---
 
-## Features
+## Live Features
 
-| Page | What it does |
+| Page | Description |
 |---|---|
-| **Overview** | Hero landing page with platform introduction and live stats |
-| **VIN Lookup** | Decode any 17-character VIN — auto-populates all sections |
-| **Recalls** | Browse NHTSA safety recalls by brand, model, and year |
-| **Complaints** | Consumer complaints with expandable row details |
-| **Analytics** | Charts: top components, timeline, crashes vs fires, US choropleth map |
+| **Overview** | Hero landing page with platform introduction and key stats |
+| **VIN Lookup** | Decode any VIN — auto-populates all sections globally |
+| **Recalls** | Browse safety recalls by brand, model, and year |
+| **Complaints** | Browse consumer complaints with expandable row details |
+| **Analytics** | Charts: top components, complaints timeline, crashes vs fires, US map |
 | **Methodology** | Explains data sources and how to interpret results |
 
-### Highlights
-
-- **Format-validated VIN input** — rejects malformed VINs before making any API call
-- **38 bundled brand logos** — official manufacturer logos, no CDN dependency
-- **Accordion recall cards** — smooth animated expand/collapse for each recall
-- **Interactive US choropleth map** — complaint density by state with hover tooltips
-- **Composed charts** — bar, pie, line, and composed chart types via Recharts
-- **Page transitions** — Framer Motion animations between tabs
+### Key Highlights
+- **One VIN, all sections** — decode once, every tab auto-loads data for that vehicle
+- **Brand logos** — official manufacturer logos displayed (38 brands bundled locally, no CDN)
+- **Accordion recalls** — click to expand each recall card with smooth animation
+- **Invalid VIN detection** — format-validated before API call with clear error messaging
+- **Interactive US map** — complaint density by state with hover tooltips
+- **Deep navy + gold theme** — Playfair Display + Inter fonts for a law-firm aesthetic
 
 ---
 
@@ -80,37 +99,37 @@ The app is a single-page React application. In development, a Vite proxy forward
 ```
 app/
 ├── public/
-│   ├── slp-logo.png
-│   ├── brand-logos/               # 38 manufacturer logos (local, no CDN)
+│   ├── slp-logo.png                
+│   ├── brand-logos/                 
 │   │   ├── ford.png
 │   │   ├── toyota.png
 │   │   ├── bmw.png
-│   │   └── ...
+│   │   └── ... (35 more brands)
 │   └── vite.svg
 ├── docs/
-│   └── architecture.png           # System architecture diagram
+│   └── architecture.png             # System architecture diagram
 ├── src/
 │   ├── api/
-│   │   └── nhtsa.ts               # All NHTSA API calls
+│   │   └── nhtsa.ts                 # All NHTSA API calls (VIN decode, recalls, complaints)
 │   ├── components/
-│   │   ├── BrandLogo.tsx
-│   │   ├── ComplaintRow.tsx
-│   │   ├── Header.tsx
-│   │   ├── RecallCard.tsx
-│   │   ├── USMap.tsx
-│   │   └── VINQuickSearch.tsx
+│   │   ├── BrandLogo.tsx            
+│   │   ├── ComplaintRow.tsx        
+│   │   ├── Header.tsx              
+│   │   ├── RecallCard.tsx           
+│   │   ├── USMap.tsx               
+│   │   └── VINQuickSearch.tsx       
 │   ├── pages/
-│   │   ├── HomePage.tsx
-│   │   ├── VINLookupPage.tsx
-│   │   ├── VehicleSearchPage.tsx
-│   │   ├── ComplaintsPage.tsx
-│   │   ├── AnalyticsPage.tsx
-│   │   └── AboutPage.tsx
-│   ├── types.ts
-│   ├── App.tsx
-│   ├── index.css
-│   └── main.tsx
-├── vite.config.ts
+│   │   ├── HomePage.tsx             
+│   │   ├── VINLookupPage.tsx        
+│   │   ├── VehicleSearchPage.tsx   
+│   │   ├── ComplaintsPage.tsx       
+│   │   ├── AnalyticsPage.tsx       
+│   │   └── AboutPage.tsx           
+│   ├── types.ts                     
+│   ├── App.tsx                      
+│   ├── index.css                    
+│   └── main.tsx                     
+├── vite.config.ts                   
 ├── tsconfig.json
 ├── tsconfig.app.json
 ├── package.json
@@ -121,17 +140,20 @@ app/
 
 ## Prerequisites
 
-| Tool | Minimum Version | Download |
-|---|---|---|
-| Node.js | v18.0.0 | [nodejs.org](https://nodejs.org) |
-| npm | v9.0.0 | Included with Node |
-| Git | Any | [git-scm.com](https://git-scm.com) |
+Install the following before proceeding:
 
-Verify your versions:
+### 1. Node.js v18 or later
+Download: [https://nodejs.org](https://nodejs.org)
 
 ```bash
-node -v    # v18.0.0 or higher
-npm -v     # v9.0.0 or higher
+node -v     # Must be v18.0.0 or higher
+npm -v      # Must be v9.0.0 or higher
+```
+
+### 2. Git
+Download: [https://git-scm.com](https://git-scm.com)
+
+```bash
 git --version
 ```
 
@@ -139,23 +161,23 @@ git --version
 
 ## Installation & Setup
 
-### 1. Clone the repository
+### Step 1 — Clone the repository
 
 ```bash
 git clone https://github.com/SreekarJenepalli/Strategic-Legal-Practices.git
 cd Strategic-Legal-Practices
 ```
 
-### 2. Install dependencies
+### Step 2 — Install all dependencies
 
 ```bash
 npm install --legacy-peer-deps
 ```
 
 > **Why `--legacy-peer-deps`?**
-> `react-simple-maps` (used for the US choropleth map) has not yet updated its peer dependency declaration for React 19. This flag skips that conflict check — the package works correctly at runtime and there is no functional impact.
+> The `react-simple-maps` package (used for the US map) has not yet updated its peer dependency declaration for React 19. This flag tells npm to skip that conflict check. The package works correctly at runtime — this flag does not affect the app in any way.
 
-You may see deprecation warnings during install — these are safe to ignore.
+You will likely see some deprecation warnings in the terminal — these are safe to ignore.
 
 ---
 
@@ -165,65 +187,13 @@ You may see deprecation warnings during install — these are safe to ignore.
 npm run dev
 ```
 
-Then open your browser at:
-
+Open your browser and go to:
 ```
 http://localhost:5173
 ```
 
-The app supports **hot module replacement** — changes to any file are reflected instantly without a full page reload.
-
----
-
-## Data Sources
-
-All data is fetched live from two NHTSA public APIs — no API key or authentication required.
-
-### NHTSA vPIC API
-**Base URL:** `https://vpic.nhtsa.dot.gov/api/vehicles`
-
-| Endpoint | Returns |
-|---|---|
-| `GET /DecodeVinValues/{vin}?format=json` | Make, model, year, engine, error codes |
-| `GET /GetAllMakes?format=json` | All registered vehicle makes |
-| `GET /GetModelsForMakeYear/make/{m}/modelyear/{y}` | Models for a given make and year |
-
-### NHTSA Complaints & Recalls API
-**Base URL:** `https://api.nhtsa.gov`
-
-| Endpoint | Returns |
-|---|---|
-| `GET /complaints/complaintsByVehicle?make=&model=&modelYear=` | Crashes, fires, injuries, deaths, ODI#, components, summary |
-| `GET /recalls/recallsByVehicle?make=&model=&modelYear=` | Campaign#, component, consequence, remedy, units affected |
-
-### CORS Handling
-
-In development, `vite.config.ts` proxies API calls:
-
-```
-/api/vpic/*  →  vpic.nhtsa.dot.gov/api/vehicles
-/api/nhtsa/* →  api.nhtsa.gov
-```
-
-In production, replace with Vercel `vercel.json` rewrites or Netlify `_redirects`.
-
----
-
-## Design System
-
-| Token | Value |
-|---|---|
-| Primary color | `#0d1f3c` (deep navy) |
-| Accent color | `#b8962e` (gold) |
-| Heading font | Playfair Display |
-| Body font | Inter |
-| Base font size | 16px |
-| Border radius | 8px |
-
----
+The app hot-reloads automatically on every file save. No restart needed during development.
 
 ## License
 
 Built exclusively for **Strategic Legal Practice**. All rights reserved.
-
-No part of this codebase may be reproduced, distributed, or used outside the scope of its original commission without explicit written permission.
