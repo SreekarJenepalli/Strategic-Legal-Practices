@@ -1,8 +1,6 @@
 <div align="center">
 
 
-# <img width="675" height="105" alt="image" src="https://github.com/user-attachments/assets/8f42da58-64b2-4149-9aa6-422d0f8c8393" />
-
 ### Vehicle Defect Intelligence Platform
 
 Real-time vehicle defect intelligence powered by live NHTSA data — built for legal professionals.
